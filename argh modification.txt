@@ -1,0 +1,35 @@
+no ip nat inside source list 100 interface GigabitEthernet0/0 overload
+no access-list 100
+
+access-list 1 permit 172.16.10.0 0.0.0.31
+ip nat pool NAT-POOL-1 203.102.98.2 203.102.98.31 netmask 255.255.255.224
+ip nat inside source list 1 pool NAT-POOL-1
+
+access-list 2 permit 172.16.10.32 0.0.0.31
+ip nat pool NAT-POOL-2 203.102.98.32 203.102.98.61 netmask 255.255.255.224
+ip nat inside source list 2 pool NAT-POOL-2
+
+access-list 3 permit 172.16.10.64 0.0.0.31
+ip nat inside source list 3 interface GigabitEthernet0/0 overload
+
+access-list 4 permit 172.16.10.96 0.0.0.31
+ip nat inside source list 4 interface GigabitEthernet2/0 overload
+
+interface GigabitEthernet0/0
+ ip nat outside
+exit
+
+interface GigabitEthernet1/0
+ ip nat inside
+exit
+
+interface GigabitEthernet2/0
+ ip nat inside
+exit
+
+interface GigabitEthernet3/0
+ ip nat inside
+exit
+
+! Clear translations
+clear ip nat translation *

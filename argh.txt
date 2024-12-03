@@ -1,0 +1,38 @@
+conf t
+
+
+no ip nat inside source list 1 pool NAT-POOL-1
+no ip nat inside source list 2 pool NAT-POOL-2
+no ip nat inside source list 3 interface gig0/0 overload
+no ip nat inside source list 4 interface gig2/0 overload
+
+access-list 100 permit ip 172.16.10.0 0.0.0.31 any
+access-list 100 permit ip 172.16.10.32 0.0.0.31 any
+access-list 100 permit ip 172.16.10.64 0.0.0.31 any
+access-list 100 permit ip 172.16.10.96 0.0.0.31 any
+
+ip nat inside source list 100 interface GigabitEthernet0/0 overload
+
+
+interface GigabitEthernet0/0
+ip nat outside
+exit
+
+interface GigabitEthernet1/0
+ip nat inside
+exit
+
+interface GigabitEthernet2/0
+ip nat inside
+exit
+
+interface GigabitEthernet3/0
+ip nat inside
+exit
+
+
+ip route 203.102.98.0 255.255.255.224 203.102.98.1
+
+end
+
+clear ip nat translation *
